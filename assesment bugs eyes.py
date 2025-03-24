@@ -61,8 +61,7 @@ def main () :
     while turn <= 10 :
       # Delay game for a random time between 2 and 4 seconds
       time.sleep(random.uniform(2,4))
-      #Debugging output statement
-      #print(turn)
+      #print(turn) DOS
       rand = random.randint(1, 4)
       position = findPosition(rand)
       drawEyes(position)
