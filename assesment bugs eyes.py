@@ -12,8 +12,6 @@ FPS = 60
 fpsClock = pygame.time.Clock()
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 800
-global score
-score = 0
 
  
 WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -51,27 +49,23 @@ def inputLoop(rand) :
   pygame.display.update()
   fpsClock.tick(FPS)
   keyPressed = False
+  initialTime = time.time()
   for event in pygame.event.get() :
     while keyPressed == False :
       pygame.event.pump()
       pressed = pygame.key.get_pressed()
-      initialTime = time.time()
       if rand == 1 and pressed[K_LEFT] and pressed[K_UP] :
-        timePressed = time.time()
         keyPressed = True
       elif rand == 2 and pressed[K_RIGHT] and pressed[K_UP] :
-        timePressed = time.time()
         keyPressed = True
       elif rand == 3 and pressed[K_LEFT] and pressed[K_DOWN] :
-        timePressed = time.time()
         keyPressed = True
       elif rand == 4 and pressed[K_RIGHT] and pressed[K_DOWN] :
-        timePressed = time.time()
         keyPressed = True
   pygame.display.update()
-  fpsClock.tick(FPS)
-  #print (keyPressed) DOS
-  return(timePressed-initialTime)
+  if keyPressed == True :
+    #print (keyPressed) DOS
+    return(initialTime)
 
         
   
@@ -82,6 +76,7 @@ def inputLoop(rand) :
 def main () :
   looping = True
   turn = 1
+  score = 0
   # The main game loop
   while looping :
     # Get inputs
@@ -108,9 +103,11 @@ def main () :
       rand = random.randint(1, 4)
       drawEyes(rand)
 
-      # Asks for player input
+      # Asks for player input and assigns a score depending on the player's speed
       #print (f"rand: {rand}") DOS
-      inputLoop(rand)
+      initialTime = inputLoop(rand)
+      tps = time.time()
+      score = round((score + (tps - initialTime)), 2)
 
       # Displays the player score so far
       print (f"score: {score}")
@@ -119,7 +116,7 @@ def main () :
     
     # Displays final score and closing message
     print (f"Final score: {score}")
-    if score > 1000 :
+    if score < 10 :
       print ("Congratulations for saving your planet!")
     else :
       print ("...")
