@@ -62,9 +62,18 @@ def inputLoop(rand) :
         keyPressed = True
       elif rand == 4 and pressed[K_RIGHT] and pressed[K_DOWN] :
         keyPressed = True
-  pygame.display.update()
-  if keyPressed == True :
-    #print (keyPressed) DOS
+      if rand == 1 :
+        if pressed[K_RIGHT] or pressed[K_DOWN] :
+          keyPressed = False
+      elif rand == 2 :
+        if pressed[K_LEFT] or pressed[K_DOWN] :
+         keyPressed = False
+      elif rand == 3 :
+        if pressed[K_RIGHT] or pressed[K_UP] :
+          keyPressed = False
+      elif rand == 4 : 
+        if pressed[K_LEFT] or pressed[K_UP] :
+          keyPressed = False
     return(initialTime)
 
         
