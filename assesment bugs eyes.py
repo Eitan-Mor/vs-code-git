@@ -19,15 +19,41 @@ pygame.display.set_caption('Beat the Bug Eyes!')
  
 ## Function definitions
 
+# Introduction message and controls
+def intro() :
+  print ("BUG EYES")
+  time.sleep(1)
+  print ("Bug eyes surround your ship.")
+  time.sleep(1)
+  print ("Bug eyes surround the earth.")
+  time.sleep(1)
+  print ("Kill them quickly, or everyone will die.")
+  time.sleep(1)
+  print ("use the arrow keys to indicate the diagonal direction the eyes appear in, your final score must be under 10.")
+  print ("You have to survive 10 waves")
+  time.sleep(3)
+
+# Closing message 
+def outro(score) :
+  print (f"Final score: {score}")
+  if score < 10 :
+    print ("Congratulations for saving your planet! You will be remembered.")
+  else :
+    print ("...")
+    time.sleep(1)
+    print ("You let everyone die. Despicable")
+
 # Function for drawing the eyes in a random spot
-def drawEyes (int) :
-  if int == 1 :
+def drawEyes (rand) :
+
+  pygame.display.update
+  if rand == 1 :
     down = random.uniform(5, 250)
     across = random.uniform(5, 350)
-  elif int == 2 :
+  elif rand == 2 :
     down = random.uniform(5, 250)
     across = random.uniform(550, 900)
-  elif int == 3 :
+  elif rand == 3 :
     down = random.uniform(400, 700)
     across = random.uniform(5, 350)
   else :
@@ -43,13 +69,24 @@ def drawEyes (int) :
   pygame.draw.ellipse(WINDOW, GREEN, pupil2)
   pygame.display.update()
   fpsClock.tick(FPS)
+  return (across, down)
+
+#Makes a small explosion when the correct input is registered
+def alienDeath(across, down) :
+  WINDOW.fill(BACKGROUND)
+  pygame.display.update()
+  pygame.draw.circle(WINDOW, RED, (across, down), 80)
+  pygame.display.update()
+  time.sleep(1)
+  WINDOW.fill(BACKGROUND)
+  pygame.display.update()
 
 # Function for looking for an input from the player
 def inputLoop(rand) :
+  initialTime = time.time()
   pygame.display.update()
   fpsClock.tick(FPS)
   keyPressed = False
-  initialTime = time.time()
   for event in pygame.event.get() :
     while keyPressed == False :
       pygame.event.pump()
@@ -74,29 +111,40 @@ def inputLoop(rand) :
       elif rand == 4 : 
         if pressed[K_LEFT] or pressed[K_UP] :
           keyPressed = False
-    return(initialTime)
+  return(initialTime)
 
-        
+# Function for handling all the functions regarding the visual bugs eyes and inputs
+def bugEyes(rand) :
+  across, down = drawEyes(rand)
+  initialTime = inputLoop(rand)
+  tps = time.time()
+  roundScore = round((tps - initialTime), 2)
+  return (roundScore)
   
 
 
 
 # The main function that controls the game
 def main () :
+  # Decleare variables within main
   looping = True
   turn = 1
   score = 0
   # The main game loop
   while looping :
-    # Get inputs
+    # Get inputs, make the game quittable in the beginning
     for event in pygame.event.get() :
       if event.type == QUIT :
         looping = False
 
-    # Game progression
-    print ("BUG EYES")
+    # Render elements of the game
+    WINDOW.fill(BACKGROUND)
+    pygame.display.update()
+    fpsClock.tick(FPS)
+    # Game introduction and controls
+    intro()
 
-    # set turns
+    # what happens each turn
     while turn <= 10 :
       pygame.event.get()
       # Render elements of the game
@@ -110,28 +158,22 @@ def main () :
       
       # Assigns a random integer from 1 to 4 for which quadrant the eyes are going to be in then draws them
       rand = random.randint(1, 4)
-      drawEyes(rand)
+      
 
       # Asks for player input and assigns a score depending on the player's speed
       #print (f"rand: {rand}") DOS
-      initialTime = inputLoop(rand)
-      tps = time.time()
-      score = round((score + (tps - initialTime)), 2)
+      score = round(score + bugEyes(rand), 2)
+      
 
-      # Displays the player score so far
+      # Displays the player score after every wave/turn
       print (f"score: {score}")
       turn += 1
     
     
     # Displays final score and closing message
-    print (f"Final score: {score}")
-    if score < 10 :
-      print ("Congratulations for saving your planet!")
-    else :
-      print ("...")
-      time.sleep(1)
-      print ("You let everyone die. Despicable")
-      # Quit game
+    outro(score)
+    
+    # Quit game
     pygame.quit()
     quit()
 
