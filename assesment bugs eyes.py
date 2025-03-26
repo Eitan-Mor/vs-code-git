@@ -35,13 +35,35 @@ def intro() :
 
 # Closing message 
 def outro(score) :
+  counter = 0
   print (f"Final score: {score}")
+  HighScores = open('recordHighScores.txt', 'a')
   if score < 10 :
     print ("Congratulations for saving your planet! You will be remembered.")
+    HighScores.write('w')
   else :
     print ("...")
     time.sleep(1)
     print ("You let everyone die. Despicable")
+    HighScores.write('l') 
+  HighScores.close()
+  with open("recordHighScores.txt") as file :
+    contents = file.read()
+    W = contents.count("w")
+    L = contents.count("l")
+    print ("Wins: ", W)
+    print ("Losses: ", L)
+    if W > L :
+      print ("You shoud look into a career in this!")
+    elif L > W :
+      print ("You might want to reconsider your career in space...")
+    else :
+      print ("Hey, at least you saved someone.")
+
+    
+    
+  
+
 
 # Function for drawing the eyes in a random spot
 def drawEyes (rand) :
@@ -69,17 +91,7 @@ def drawEyes (rand) :
   pygame.draw.ellipse(WINDOW, GREEN, pupil2)
   pygame.display.update()
   fpsClock.tick(FPS)
-  return (across, down)
-
-#Makes a small explosion when the correct input is registered
-def alienDeath(across, down) :
-  WINDOW.fill(BACKGROUND)
-  pygame.display.update()
-  pygame.draw.circle(WINDOW, RED, (across, down), 80)
-  pygame.display.update()
-  time.sleep(1)
-  WINDOW.fill(BACKGROUND)
-  pygame.display.update()
+  return ()
 
 # Function for looking for an input from the player
 def inputLoop(rand) :
@@ -88,6 +100,8 @@ def inputLoop(rand) :
   fpsClock.tick(FPS)
   keyPressed = False
   for event in pygame.event.get() :
+    pygame.event.pump()
+    pressed = pygame.key.get_pressed()
     while keyPressed == False :
       pygame.event.pump()
       pressed = pygame.key.get_pressed()
@@ -115,10 +129,11 @@ def inputLoop(rand) :
 
 # Function for handling all the functions regarding the visual bugs eyes and inputs
 def bugEyes(rand) :
-  across, down = drawEyes(rand)
+  drawEyes(rand)
   initialTime = inputLoop(rand)
   tps = time.time()
-  roundScore = round((tps - initialTime), 2)
+  #print (tps, initialTime) #DOS
+  roundScore = tps - initialTime 
   return (roundScore)
   
 
@@ -142,10 +157,10 @@ def main () :
     pygame.display.update()
     fpsClock.tick(FPS)
     # Game introduction and controls
-    intro()
+    #intro()
 
     # what happens each turn
-    while turn <= 10 :
+    while turn <= 10 and score < 10 :
       pygame.event.get()
       # Render elements of the game
       WINDOW.fill(BACKGROUND)
@@ -153,15 +168,15 @@ def main () :
       fpsClock.tick(FPS)
       # Delay game for a random time between 2 and 4 seconds
       time.sleep(random.uniform(2,4))
-      #print(turn) DOS
-      #rand = 3 DOS
+      #print(turn) #DOS
+      #rand = 3 #DOS
       
       # Assigns a random integer from 1 to 4 for which quadrant the eyes are going to be in then draws them
       rand = random.randint(1, 4)
       
 
       # Asks for player input and assigns a score depending on the player's speed
-      #print (f"rand: {rand}") DOS
+      #print (f"rand: {rand}") #DOS
       score = round(score + bugEyes(rand), 2)
       
 
