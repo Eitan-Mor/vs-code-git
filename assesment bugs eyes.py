@@ -29,12 +29,12 @@ def intro() :
   time.sleep(1)
   print ("Kill them quickly, or everyone will die.")
   time.sleep(1)
-  print ("use the arrow keys to indicate the diagonal direction the eyes appear in, your final score must be under 10.")
+  print ("use the arrow keys to indicate the diagonal direction the eyes appear in, your final score must be under 10 seconds.")
   print ("You have to survive 10 waves")
   time.sleep(3)
 
 # Closing message 
-def outro(score) :
+def outro(score, turnCount, turn) :
   counter = 0
   print (f"Final score: {score}")
   HighScores = open('recordHighScores.txt', 'a')
@@ -59,7 +59,11 @@ def outro(score) :
       print ("You might want to reconsider your career in space...")
     else :
       print ("Hey, at least you saved someone.")
-
+  if input ("Enter 'info' to receive a detailed report of your scores for each turn, any other input will close the game: ") == "info" :
+    while turnCount >= 1 :
+      print (f'Turn {turnCount}: {round(turn[turnCount - 1], 2)}')
+      turnCount -= 1
+  return()
     
     
   
@@ -141,9 +145,10 @@ def bugEyes(rand) :
 
 # The main function that controls the game
 def main () :
-  # Decleare variables within main
+  # Decleare variables and array to loop the gane and record the turns info
   looping = True
-  turn = 1
+  turnCount = 0
+  turn = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   score = 0
   # The main game loop
   while looping :
@@ -160,7 +165,7 @@ def main () :
     intro()
 
     # what happens each turn
-    while turn <= 10 and score < 10 :
+    while turnCount <= 9 and score < 10 :
       pygame.event.get()
       # Render elements of the game
       WINDOW.fill(BACKGROUND)
@@ -177,16 +182,17 @@ def main () :
 
       # Asks for player input and assigns a score depending on the player's speed
       #print (f"rand: {rand}") #DOS
-      score = round(score + bugEyes(rand), 2)
+      turn[turnCount] = bugEyes(rand)
+      score = round(score + turn[turnCount], 2)
       
 
       # Displays the player score after every wave/turn
-      print (f"score: {score}")
-      turn += 1
+      #print (f"score: {score}")#DOS
+      turnCount += 1
     
     
     # Displays final score and closing message
-    outro(score)
+    outro(score, turnCount, turn)
     
     # Quit game
     pygame.quit()
