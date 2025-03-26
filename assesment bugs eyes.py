@@ -54,7 +54,7 @@ def outro(score) :
     print ("Wins: ", W)
     print ("Losses: ", L)
     if W > L :
-      print ("You shoud look into a career in this!")
+      print ("You're definitely getting that promotion!")
     elif L > W :
       print ("You might want to reconsider your career in space...")
     else :
@@ -102,29 +102,29 @@ def inputLoop(rand) :
   for event in pygame.event.get() :
     pygame.event.pump()
     pressed = pygame.key.get_pressed()
-    while keyPressed == False :
-      pygame.event.pump()
-      pressed = pygame.key.get_pressed()
-      if rand == 1 and pressed[K_LEFT] and pressed[K_UP] :
-        keyPressed = True
-      elif rand == 2 and pressed[K_RIGHT] and pressed[K_UP] :
-        keyPressed = True
-      elif rand == 3 and pressed[K_LEFT] and pressed[K_DOWN] :
-        keyPressed = True
-      elif rand == 4 and pressed[K_RIGHT] and pressed[K_DOWN] :
-        keyPressed = True
-      if rand == 1 :
-        if pressed[K_RIGHT] or pressed[K_DOWN] :
-          keyPressed = False
-      elif rand == 2 :
-        if pressed[K_LEFT] or pressed[K_DOWN] :
-         keyPressed = False
-      elif rand == 3 :
-        if pressed[K_RIGHT] or pressed[K_UP] :
-          keyPressed = False
-      elif rand == 4 : 
-        if pressed[K_LEFT] or pressed[K_UP] :
-          keyPressed = False
+  while keyPressed == False :
+    pygame.event.pump()
+    pressed = pygame.key.get_pressed()
+    if rand == 1 and pressed[K_LEFT] and pressed[K_UP] :
+      keyPressed = True
+    elif rand == 2 and pressed[K_RIGHT] and pressed[K_UP] :
+      keyPressed = True
+    elif rand == 3 and pressed[K_LEFT] and pressed[K_DOWN] :
+      keyPressed = True
+    elif rand == 4 and pressed[K_RIGHT] and pressed[K_DOWN] :
+      keyPressed = True
+    if rand == 1 :
+      if pressed[K_RIGHT] or pressed[K_DOWN] :
+        keyPressed = False
+    elif rand == 2 :
+      if pressed[K_LEFT] or pressed[K_DOWN] :
+        keyPressed = False
+    elif rand == 3 :
+      if pressed[K_RIGHT] or pressed[K_UP] :
+        keyPressed = False
+    elif rand == 4 : 
+      if pressed[K_LEFT] or pressed[K_UP] :
+        keyPressed = False
   return(initialTime)
 
 # Function for handling all the functions regarding the visual bugs eyes and inputs
@@ -157,7 +157,7 @@ def main () :
     pygame.display.update()
     fpsClock.tick(FPS)
     # Game introduction and controls
-    #intro()
+    intro()
 
     # what happens each turn
     while turn <= 10 and score < 10 :
